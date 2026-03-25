@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EmoFlux Chatbot</title>
+    <style>
+        body { font-family: Arial; background:#f2f2f2; }
+
+        .chat-container {
+            width: 350px; height: 500px;
+            background: white; margin: 50px auto;
+            border-radius: 10px; display:flex; flex-direction:column;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .header {
+            background:#6c63ff; color:white;
+            padding:15px; text-align:center;
+        }
+
+        .chat-box {
+            flex:1; padding:10px; overflow-y:auto;
+        }
+
+        .user {
+            background:#d1e7ff; margin:5px;
+            padding:8px; border-radius:10px;
+            text-align:right;
+        }
+
+        .bot {
+            background:#e2e2e2; margin:5px;
+            padding:8px; border-radius:10px;
+            text-align:left;
+        }
+
+        .input-area { display:flex; }
+
+        input {
+            flex:1; padding:10px;
+            border:none; outline:none;
+        }
+
+        button {
+            padding:10px; background:#6c63ff;
+            color:white; border:none;
+        }
+    </style>
+</head>
+
+<body>
+<button onclick="goBack()" style="margin:10px;">⬅ Back</button>
+<div class="chat-container">
+    <div class="header">EmoFlux Bot 🤖</div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+function goBack(){
+    window.history.back();
+}
+
+async function sendMessage() {
+    let inputBox = document.getElementById("userInput");
+    let text = inputBox.value.trim();
+
+    if(text === "") return;
+
+    addMessage(text, "user");
+    inputBox.value = "";
+
+    try {
+        // Send to backend
+        const response = await fetch('http://localhost:8082/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: text })
+        });
+
+        if(!response.ok) throw new Error("Backend error");
+
+        const botReply = await response.text();
+        addMessage(botReply, "bot");
+    } catch (err) {
+        addMessage("Error connecting to backend 😵", "bot");
+    }
+}
+
+function addMessage(text, type) {
+    let chatBox = document.getElementById("chatBox");
+
+    let msg = document.createElement("div");
+    msg.className = type;
+    msg.innerText = text;
+
+    chatBox.appendChild(msg);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
+
+</body>
+</html>

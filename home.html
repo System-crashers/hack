@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 30px; }
+        select, button { padding: 10px; margin: 10px; }
+
+          #gameArea {
+    width: 300px;
+    height: 300px;
+    background: #f0f0f0;
+    position: relative;
+    margin: 50px auto;
+    border: 2px solid #333;
+  }
+  #score {
+    text-align: center;
+    font-size: 20px;
+    margin-top: 10px;
+  }
+  .box {
+    width: 40px;
+    height: 40px;
+    background: red;
+    position: absolute;
+    cursor: pointer;
+  }
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Welcome!</h2>
+
+<button onclick="logout()">Logout</button>
+
+<!-- 👉 Go to chatbot page -->
+<button onclick="openChat()">Open Chatbot 💬</button>
+
+<hr>
+
+<!-- MOOD -->
+<h3>Select Mood</h3>
+
+<select id="mood">
+    <option value="">--Select--</option>
+    <option value="happy">Happy</option>
+    <option value="sad">Sad</option>
+    <option value="angry">Angry</option>
+    <option value="lazy">Bored</option>
+</select>
+
+<button onclick="showMood()">Check Mood</button>
+
+<p id="moodText"></p>
+
+<!-- GAME -->
+<div id="gameSection" style="display:none;">
+    <hr>
+    <h3>Bored? Play Game 🎮</h3>
+    <button onclick="startGame()">Start Game</button>
+    <p>Score: <span id="score">0</span></p>
+    <div id="gameArea"></div>
+</div>
+
+<hr>
+
+<!-- GRAPH -->
+<h3>Daily Mood Graph</h3>
+<canvas id="chart"></canvas>
+
+<script>
+
+// NAVIGATION
+function logout(){
+    window.location.href = "index.html";
+}
+
+function openChat(){
+    window.location.href = "chat.html"; // 👉 chatbot page
+}
+
+// DATA
+let data = JSON.parse(localStorage.getItem("moodData")) || {
+    happy:0, sad:0, angry:0, lazy:0
+};
+
+// MOOD
+function showMood(){
+    let mood = document.getElementById("mood").value;
+    let text = "";
+
+    if(mood === "happy") text = "Smile 😂";
+    else if(mood === "sad") text = "Eat chocolate 🍫";
+    else if(mood === "angry") text = "Calm down 😤";
+    else if(mood === "lazy") text = "You are bored 😴";
+    else return;
+
+    document.getElementById("moodText").innerText = text;
+
+    data[mood]++;
+    localStorage.setItem("moodData", JSON.stringify(data));
+
+    if(mood === "lazy"){
+        document.getElementById("gameSection").style.display = "block";
+    } else {
+        document.getElementById("gameSection").style.display = "none";
+    }
+
+    updateChart(mood);
+}
+
+// GRAPH
+let chart;
+function updateChart(selectedMood){
+    let ctx = document.getElementById("chart").getContext("2d");
+
+    if(chart) chart.destroy();
+
+    let values = [0,0,0,0]; 
+    // Order: [Happy, Sad, Angry, Bored]
+
+    if(selectedMood === "happy"){
+        values = [10, 3, 3, 2]; 
+        // very happy, little sad/angry, very little bored
+    }
+    else if(selectedMood === "sad"){
+        values = [1, 10, 7, 3]; 
+        // low happy, high sad, high angry, low bored
+    }
+    else if(selectedMood === "angry"){
+        values = [0, 7, 10, 3]; 
+        // no happy, high sad, max angry, low bored
+    }
+    else if(selectedMood === "lazy"){
+        values = [0, 4, 1, 10]; 
+        // no happy, medium sad, very low angry, high bored
+    }
+
+    chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Happy","Sad","Angry","Bored"],
+            datasets: [{
+                data: values,
+                backgroundColor: ["yellow", "blue", "red", "gray"],
+                borderRadius: 10
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 10
+                }
+            }
+        }
+    });
+}updateChart(mood);
+
+// GAME
+
+let score = 0;
+let area = document.getElementById("gameArea");
+
+// Create the box
+let box = document.createElement("div");
+box.classList.add("box");
+area.appendChild(box);
+
+// Initial random position
+box.style.left = Math.random() * (area.clientWidth - 40) + "px";
+box.style.top = Math.random() * (area.clientHeight - 40) + "px";
+
+// Move box away from cursor
+area.addEventListener("mousemove", function(e){
+    const boxRect = box.getBoundingClientRect();
+    const areaRect = area.getBoundingClientRect();
+
+    // Calculate cursor position relative to the game area
+    let mouseX = e.clientX - areaRect.left;
+    let mouseY = e.clientY - areaRect.top;
+
+    // Current box position
+    let boxX = parseFloat(box.style.left);
+    let boxY = parseFloat(box.style.top);
+
+    // Distance between mouse and box center
+    let boxCenterX = boxX + 20;
+    let boxCenterY = boxY + 20;
+    let dx = boxCenterX - mouseX;
+    let dy = boxCenterY - mouseY;
+    let distance = Math.sqrt(dx*dx + dy*dy);
+
+    // If cursor is too close, move box away
+    if(distance < 80){
+        // Move in opposite direction
+        let moveX = dx / distance * 20; // 20 px step
+        let moveY = dy / distance * 20;
+
+        boxX += moveX;
+        boxY += moveY;
+
+        // Keep box inside the area
+        boxX = Math.min(Math.max(0, boxX), area.clientWidth - 40);
+        boxY = Math.min(Math.max(0, boxY), area.clientHeight - 40);
+
+        box.style.left = boxX + "px";
+        box.style.top = boxY + "px";
+    }
+});
+
+// Increase score when clicked
+box.addEventListener("click", function(){
+    score++;
+    document.getElementById("score").innerText = score;
+});
+
+</script>
+
+</body>
+</html>

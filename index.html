@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Emoflux Login</title>
+<style>
+body { font-family: Comic Sans MS, Arial; text-align: center; padding: 50px; background: #ffe0e0; }
+h1 { color: #ff0000; }
+input { padding: 10px; margin: 10px; width: 220px; }
+button { padding: 10px 20px; margin: 10px; background: #ffcccc; border: 2px solid #ff0000; cursor: pointer; }
+#message { margin-top: 20px; color: red; font-weight: bold; }
+#signupLink { margin-top: 10px; display: block; color: blue; text-decoration: underline; }
+</style>
+</head>
+<body>
+<h1>Welcome to Emoflux!! 😎</h1>
+<p>(The coolest website in the history of websites... maybe.)</p>
+
+<input type="text" id="username" placeholder="Username"><br>
+<input type="password" id="password" placeholder="Password"><br>
+<button onclick="login()">Login</button>
+<div id="signupContainer"></div>
+<div id="message"></div>
+
+<script>
+// Ensure users object exists
+if(!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify({}));
+}
+
+const signupContainer = document.getElementById('signupContainer');
+const usernameInput = document.getElementById('username');
+
+function updateSignupLink() {
+    const users = JSON.parse(localStorage.getItem('users')) || {};
+    const username = usernameInput.value.trim();
+
+    if(Object.keys(users).length === 0) {
+        signupContainer.innerHTML = `<p id="signupLink">Don't have an account? <a href="signup.html">Sign up here</a></p>`;
+    } else if(username && !users[username]) {
+        signupContainer.innerHTML = `<p id="signupLink">Username not found? <a href="signup.html">Sign up here</a></p>`;
+    } else if(username && users[username]) {
+        signupContainer.innerHTML = `<p id="signupLink">Username already exists! You can't sign up with this. 😏</p>`;
+    } else {
+        signupContainer.innerHTML = `<p id="signupLink">Don't have an account? <a href="signup.html">Sign up here</a></p>`;
+    }
+}
+
+// Update signup link whenever user types a username
+usernameInput.addEventListener('input', updateSignupLink);
+
+// Initial check on page load
+updateSignupLink();
+
+function login() {
+    const username = usernameInput.value.trim();
+    const password = document.getElementById('password').value.trim();
+    const message = document.getElementById('message');
+    const users = JSON.parse(localStorage.getItem('users')) || {};
+
+    if(!username || !password) {
+        message.textContent = "Please enter both username and password! 😤";
+        return;
+    }
+
+    if(users[username] && users[username] === password) {
+        localStorage.setItem('currentUser', username);
+        alert("Welcome to Emoflux, you genius! 🎉");
+        window.location.href = "home.html";
+    } else {
+        message.textContent = "Invalid username or password! Try harder. 😤";
+    }
+}
+</script>
+</body>
+</html>

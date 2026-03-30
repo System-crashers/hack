@@ -56,3 +56,22 @@ hackthis/
 ```bash
 git clone https://github.com/System-crashers/hackthis.git
 cd hackthis
+
+## API EndPoints
+
+| Method | Endpoint        | Description                  |
+|--------|---------------|------------------------------|
+| GET    | /             | Load home page               |
+| POST   | /signup       | Register new user            |
+| POST   | /login        | User login                   |
+| GET    | /chat         | Open chatbot interface       |
+| POST   | /chat         | Send message to chatbot      |
+| GET    | /users        | Get user details             |
+
+## Deployment(Render.com)
+
+| Component | Platform        | Details                                  |
+|----------|----------------|------------------------------------------|
+| Frontend | GitHub Pages   | Hosted using GitHub Pages (static site)  |
+| Backend  | Local Server   | Runs using Java (Main.java)              |
+| Access   | Browser        | Open via GitHub Pages or local HTML file |

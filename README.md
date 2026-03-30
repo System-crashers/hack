@@ -67,7 +67,7 @@ cd hackthis
 | POST   | /chat         | Send message to chatbot      |
 | GET    | /users        | Get user details             |
 
- Deployment(Render.com)
+## Deployment(Render.com)
 
 | Component | Platform        | Details                                  |
 |----------|----------------|------------------------------------------|

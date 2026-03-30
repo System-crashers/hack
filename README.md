@@ -21,3 +21,12 @@ This gap often leads to stress, poor time management, and reduced efficiency, pa
 - Simple and user-friendly interface
 - Login and logout functionality
 - Fast and lightweight performance
+## Tech Stack
+
+| Category   | Technologies Used            |
+|------------|-----------------------------|
+| Frontend   | HTML, CSS, JavaScript       |
+| Backend    | Java                        |
+| Database   | MySQL / None                |
+| Tools      | VS Code, Git, GitHub        |
+| Deployment | GitHub Pages                |

@@ -32,7 +32,7 @@ This gap often leads to stress, poor time management, and reduced efficiency, pa
 | Deployment | GitHub Pages                |
 
 ## Project Structure
-'''
+```
 
 hackthis/
 │── backend/
@@ -49,7 +49,7 @@ hackthis/
 │── index.html
 │── module-info.java
 │── README.md
-'''
+```
 ## Quick Start(Local)
 
 ### 1. Clone the repository

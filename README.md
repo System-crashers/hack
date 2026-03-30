@@ -32,6 +32,8 @@ This gap often leads to stress, poor time management, and reduced efficiency, pa
 | Deployment | GitHub Pages                |
 
 ## Project Structure
+'''
+
 hackthis/
 │── backend/
 │   │── DemoApplication.java
@@ -47,3 +49,10 @@ hackthis/
 │── index.html
 │── module-info.java
 │── README.md
+'''
+## Quick Start(Local)
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/System-crashers/hackthis.git
+cd hackthis

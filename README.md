@@ -30,3 +30,20 @@ This gap often leads to stress, poor time management, and reduced efficiency, pa
 | Database   | MySQL / None                |
 | Tools      | VS Code, Git, GitHub        |
 | Deployment | GitHub Pages                |
+
+## Project Structure
+hackthis/
+│── backend/
+│   │── DemoApplication.java
+│   │── DemoApplicationTests.java
+│   │── Main.java
+│   │── UserController.java
+│
+│── frontend/
+│   │── chat.html
+│   │── home.html
+│   │── signup.html
+│
+│── index.html
+│── module-info.java
+│── README.md

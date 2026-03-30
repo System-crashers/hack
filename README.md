@@ -12,3 +12,12 @@ Provide emotional support through conversation
 Suggest personalized tasks or activities based on mood
 Help users stay productive while also maintaining mental balance
 This gap often leads to stress, poor time management, and reduced efficiency, particularly among students balancing academics and personal responsibilities.
+## Features
+- Mood detection system
+- Interactive chatbot
+- Mood-based task suggestions
+- To-do list management
+- Personalized user experience
+- Simple and user-friendly interface
+- Login and logout functionality
+- Fast and lightweight performance
